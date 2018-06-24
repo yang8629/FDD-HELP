@@ -4,6 +4,7 @@ import { Constants, Permissions, Location } from 'expo';
 import { Icon } from 'react-native-elements';
 import MapView from 'react-native-maps';
 import Database from '../firebase';
+import Help from './Help';
 
 export default class Home extends Component {
     state = {
@@ -78,13 +79,20 @@ export default class Home extends Component {
                 longitude: location.coords.longitude,
                 longitudeDelta: 0.01,
                 latitudeDelta: 0.02
-            }
+            },
+            myregion: {
+                longitude: location.coords.latitude,
+                latitude: location.coords.longitude,
+                longitudeDelta: 0.01,
+                latitudeDelta: 0.02,
+            },
         });
-    };
+    };    
 
     _setMyLocation = () => {
-        Database.data.ref().child('position').set(this.state.region)
-    }
+        this.props.navigation.navigate('Help', { ...this.state.myregion })
+        //Database.data.ref().child('position').child('yang').set(this.state.myregion)
+    };
 
     render() {
         return (
@@ -109,10 +117,11 @@ export default class Home extends Component {
                         containerStyle={styles.getLocation}
                         onPress={this._getLocationAsync}
                     />
-                    <Text onPress={() => { this._setMyLocation, this.props.navigation.navigate('Help') }}
+                    <Text
+                        onPress={() => this._setMyLocation()}
                         style={styles.help}>HELP</Text>
                 </MapView>
-            </View>
+            </View >
         );
     }
 }
@@ -157,13 +166,9 @@ const styles = StyleSheet.create({
     },
     getLocation: {
         position: 'absolute',
-        //padding: 10,
         marginTop: 530,
-        marginLeft: 320,
+        marginLeft: 340,
         backgroundColor: '#517fa4',
-        // borderColor: 'transparent',
-        // borderRadius: 30,
-        // backgroundColor: 'red',
     },
     help: {
         position: 'absolute',

@@ -11,10 +11,14 @@ const config = {
 };
 
 export default class Database {
-    static data;
+    static = {
+        data: null,
+        auth: null,
+    }
 
     static init() {
         firebase.initializeApp(config);
         Database.data = firebase.database();
+        Database.auth = firebase.auth();
     }
 } 

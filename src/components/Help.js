@@ -1,11 +1,14 @@
-import React,{ Component } from 'react'
-import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, } from 'react-native'
+import React, { Component } from 'react'
+import { Alert, StyleSheet, Text, View, Image, TouchableWithoutFeedback, } from 'react-native'
 import { Constants } from 'expo';
 import { Icon } from 'react-native-elements';
+import Database from '../firebase';
 
 export default class Help extends Component {
-    static navigationOptions  = ({ navigation }) => {
-        return{
+
+    static navigationOptions = ({ navigation }) => {
+        const { params } = navigation.state
+        return {
             header: null,
             // headerStyle: {
             //     height: 80,
@@ -29,48 +32,60 @@ export default class Help extends Component {
         }
     };
 
-    render() {
+    _setMyLocation = (params) => {
+        Database.data.ref().child('position').child('yang').set(params)
+    }
+
+    render() {        
+        const { params } = this.props.navigation.state
         return (
-        <View style={styles.container}>
-            <View style={{flex: 3, backgroundColor: 'gray'}}>
-            </View>
-            <Text style={styles.score}>20</Text>
-            <View style={{flex: 7}}>
-                <Text style={styles.text}>
-                Event:        {'\n'}{'\n'}
-                Location:     {'\n'}{'\n'}
-                Detail:       {'\n'}{'\n'}
-                </Text>
-                <View style={{flexDirection: 'row', justifyContent: 'center',
-                marginTop:100,paddingLeft:40,paddingRight:40}}>
-                    <Text style={{ flex: 1,
-                    width:200,
-                    borderColor: 'black',
-                    borderWidth: 3,
-                    paddingLeft: 50,
-                    fontSize: 35 }}
-                    onPress={() => this.props.navigation.goBack()}>Back</Text>
-                    <Text style={{ flex: 1, 
-                    width:200,
-                    justifyContent: 'center',
-                    backgroundColor: 'green',
-                    borderColor: 'black',
-                    borderWidth: 3,
-                    paddingLeft: 13,
-                    fontSize: 35 }}>Accept</Text>
+            <View style={styles.container}>
+                <View style={{ flex: 3, backgroundColor: 'gray' }}>
                 </View>
+                <Text style={styles.score}>20</Text>
+                <View style={{ flex: 7 }}>
+                    <Text style={styles.text}>
+                        Event:        {'\n'}{'\n'}
+                        Location:     {'\n'}{'\n'}
+                        Detail:       {'\n'}{'\n'}
+                    </Text>
+                    <View style={{
+                        flexDirection: 'row', justifyContent: 'center',
+                        marginTop: 100, paddingLeft: 40, paddingRight: 40
+                    }}>
+                        <Text style={{
+                            flex: 1,
+                            width: 200,
+                            borderColor: 'black',
+                            borderWidth: 3,
+                            paddingLeft: 50,
+                            fontSize: 35
+                        }}
+                            onPress={() => this.props.navigation.goBack()}>Back</Text>
+                        <Text style={{
+                            flex: 1,
+                            width: 200,
+                            justifyContent: 'center',
+                            backgroundColor: 'green',
+                            borderColor: 'black',
+                            borderWidth: 3,
+                            paddingLeft: 13,
+                            fontSize: 35
+                        }}
+                            onPress={() => this._setMyLocation(params)}>Accept</Text>
+                    </View>
+                </View>
+
+
             </View>
-            
-            
-        </View>
         );
-  }
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop:  Constants.statusBarHeight,
+        marginTop: Constants.statusBarHeight,
         backgroundColor: '#ecf0f1',
     },
     head: {
