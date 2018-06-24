@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, StyleSheet, Alert, TextInput, Image } from 'react-native'
 import { Constants, Facebook } from 'expo';
 import { Button } from 'react-native-elements';
+import Database from './config/firebase';
 
 export default class Login extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -34,6 +35,9 @@ export default class Login extends Component {
     _signUpButtonPress = () => {
         // Alert.alert('到註冊畫面');
         this.props.navigation.navigate('signup')
+        Database.data.ref().child('111').child('222').set({
+            yang: 8629
+        })
     };
 
     _handleFacebookLogin = async () => {
@@ -81,13 +85,13 @@ export default class Login extends Component {
                     style={styles.textInput}
                     value={this.state.inputValue}
                     placeholder='請輸入帳號'
-                    //clearTextOnFocus="true"
+                //clearTextOnFocus="true"
                 />
                 <TextInput
                     style={styles.textInput}
                     value={this.state2.inputValue2}
                     placeholder='請輸入密碼'
-                    //clearTextOnFocus="true"
+                //clearTextOnFocus="true"
                 />
 
                 <Button

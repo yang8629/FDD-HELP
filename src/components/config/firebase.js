@@ -10,6 +10,11 @@ const config = {
     messagingSenderId: "786581740292"
 };
 
-firebase.initializeApp(config);
+export default class Database {
+    static data;
 
-export const Database = firebase.database();
+    static init() {
+        firebase.initializeApp(config);
+        Database.data = firebase.database();
+    }
+} 

@@ -4,6 +4,7 @@ import { Constants, Permissions, Location } from 'expo';
 import { Icon } from 'react-native-elements';
 import MapView from 'react-native-maps';
 import Database from './config/firebase';
+import firebase from 'firebase';
 
 export default class Home extends Component {
     state = {
@@ -21,6 +22,7 @@ export default class Home extends Component {
         },
         errorMessage: null
     }
+
     static navigationOptions = ({ navigation }) => {
         return {
             header: null,
@@ -56,17 +58,6 @@ export default class Home extends Component {
         } else {
             this._getLocationAsync();
         }
-        //連接firebase
-        // var config = {
-        //     apiKey: "AIzaSyBuXjFbmnYOmkZMMsv41JqGvc9lcrUAOsk",
-        //     authDomain: "help-49fbd.firebaseapp.com",
-        //     databaseURL: "https://help-49fbd.firebaseio.com",
-        //     projectId: "help-49fbd",
-        //     storageBucket: "help-49fbd.appspot.com",
-        //     messagingSenderId: "786581740292"
-        // };
-        // firebase.initializeApp(config);
-        // var database = firebase.database();
     }
 
     onRegionChangeComplete = (region) => {
@@ -92,6 +83,10 @@ export default class Home extends Component {
         });
     };
 
+    _setMyLocation = () => {
+        Database.data.ref().child('position').set(this.state.region)
+    }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -115,7 +110,7 @@ export default class Home extends Component {
                         containerStyle={styles.getLocation}
                         onPress={this._getLocationAsync}
                     />
-                    <Text onPress={() => this.props.navigation.navigate('Help')}
+                    <Text onPress={() => { this._setMyLocation, this.props.navigation.navigate('Help') }}
                         style={styles.help}>HELP</Text>
                 </MapView>
             </View>
