@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, StyleSheet, Alert, TextInput, Image } from 'react-native'
 import { Constants, Facebook } from 'expo';
 import { Button } from 'react-native-elements';
-import Database from './config/firebase';
+import Database from '../firebase';
 
 export default class Login extends Component {
     static navigationOptions = ({ navigation }) => {

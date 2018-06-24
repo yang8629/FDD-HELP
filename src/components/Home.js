@@ -3,8 +3,7 @@ import { Alert, Platform, StyleSheet, Text, View, Image, TouchableWithoutFeedbac
 import { Constants, Permissions, Location } from 'expo';
 import { Icon } from 'react-native-elements';
 import MapView from 'react-native-maps';
-import Database from './config/firebase';
-import firebase from 'firebase';
+import Database from '../firebase';
 
 export default class Home extends Component {
     state = {

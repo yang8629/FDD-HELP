@@ -6,7 +6,6 @@ import Login from './components/Login';
 import Home from './components/Home';
 import Account from './components/Account';
 import Help from './components/Help';
-import  Database  from './components/config/firebase';
 
 const LoginStack = createStackNavigator({
     Login: {
