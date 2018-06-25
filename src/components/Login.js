@@ -12,111 +12,134 @@ export default class Login extends Component {
     };
 
     state = {
-        inputValue: '',
+        username: null,
+        email: null,
+        password: null,
     };
-    state2 = {
-        inputValue2: '',
+
+    _setEmail = (email) => {
+        this.setState({ email })
     };
 
+    _setPassword = (password) => {
+        this.setState({ password })
+    };
 
-    // _handleTextChange = inputValue => {
-    //     this.setState({ inputValue });
-    // };
+    _loginButtonPress = async () => {
+        if (this.state.email != null) {
+            if (this.state.password != null) {
+                try {
+                    await Database.auth.signInWithEmailAndPassword(this.state.email, this.state.password);
+                    this.props.navigation.navigate('HOME')
+                }
+                catch (e) {
+                    var errorMessage = e.message;
+                    Alert.alert('錯誤', errorMessage);
+                }
+            }
+            else { Alert.alert('錯誤', '密碼不可為空'); }
+        }
+        else { Alert.alert('錯誤', '信箱不可為空'); }
 
-    // _handleTextChange2 = inputValue2 => {
-    //     this.setState({ inputValue2 });
-    // };
-
-    _loginButtonPress = () => {
-        Alert.alert('登入成功');
-        this.props.navigation.navigate('HOME')
+        var user = Database.auth.currentUser;
+        if (user != null) {
+            Database.data.ref('/user/' + user.uid).once('value').then(function (snapshot) {
+                var username = snapshot.child('username').val()
+                Alert.alert('Welcome ' + username);
+            });
+        };
     };
 
     _signUpButtonPress = () => {
-        // Alert.alert('到註冊畫面');
-        this.props.navigation.navigate('signup')
-        Database.data.ref().child('111').child('222').set({
-            yang: 8629
-        })
+        Alert.alert('到註冊畫面');
+        this.props.navigation.navigate('Signup')
     };
 
-    _handleFacebookLogin = async () => {
-        try {
-            const {
-                type,
-                token,
-            } = await Facebook.logInWithReadPermissionsAsync(
-                '1201211719949057', // Replace with your own app id in standalone app
-                { permissions: ['public_profile'] }
-            );
+    // _handleFacebookLogin = async () => {
+    //     try {
+    //         const {
+    //             type,
+    //             token,
+    //         } = await Facebook.logInWithReadPermissionsAsync(
+    //             '1201211719949057', // Replace with your own app id in standalone app
+    //             { permissions: ['public_profile'] }
+    //         );
 
-            switch (type) {
-                case 'success': {
-                    // Get the user's name using Facebook's Graph API
-                    const response = await fetch(
-                        `https://graph.facebook.com/me?access_token=${token}`
-                    );
-                    const profile = await response.json();
-                    Alert.alert('Logged in!', `Hi ${profile.name}!`);
-                    break;
-                }
-                case 'cancel': {
-                    Alert.alert('Cancelled!', 'Login was cancelled!');
-                    break;
-                }
-                default: {
-                    Alert.alert('Oops!', 'Login failed!');
-                }
-            }
-        }
-        catch (e) {
-            Alert.alert('Oops!', 'Login failed!');
-        }
-    };
+    //         switch (type) {
+    //             case 'success': {
+    //                 // Get the user's name using Facebook's Graph API
+    //                 const response = await fetch(
+    //                     `https://graph.facebook.com/me?access_token=${token}`
+    //                 );
+    //                 const profile = await response.json();
+    //                 Alert.alert('Logged in!', `Hi ${profile.name}!`);
+    //                 break;
+    //             }
+    //             case 'cancel': {
+    //                 Alert.alert('Cancelled!', 'Login was cancelled!');
+    //                 break;
+    //             }
+    //             default: {
+    //                 Alert.alert('Oops!', 'Login failed!');
+    //             }
+    //         }
+    //     }
+    //     catch (e) {
+    //         Alert.alert('Oops!', 'Login failed!');
+    //     }
+    // };
 
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.paragraph}>
-                    登入
-            </Text>
+                <View style={{ flex: 3 }}>
 
-                <TextInput
-                    style={styles.textInput}
-                    value={this.state.inputValue}
-                    placeholder='請輸入帳號'
-                //clearTextOnFocus="true"
-                />
-                <TextInput
-                    style={styles.textInput}
-                    value={this.state2.inputValue2}
-                    placeholder='請輸入密碼'
-                //clearTextOnFocus="true"
-                />
+                    <Text style={styles.paragraph}>
+                        登入
+                    </Text>
 
-                <Button
-                    title="登入"
-                    onPress={this._loginButtonPress}
-                    color="#fff"
-                    titleStyle={({ fontWeight: 700 }, { fontSize: 32 })}
-                    buttonStyle={styles.buttonStyle}
-                />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='請輸入帳號'
+                        onChangeText={(email) => this._setEmail(email)}
+                    />
 
-                <Button
-                    title="註冊"
-                    onPress={this._signUpButtonPress}
-                    color="#fff"
-                    titleStyle={({ fontWeight: '700' }, { fontSize: 32 })}
-                    buttonStyle={styles.buttonStyle}
-                />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='請輸入密碼'
+                        onChangeText={(password) => this._setPassword(password)}
+                        secureTextEntry={true}
+                    />
 
-                <Button
+                </View>
+
+                <View style={{ flex: 2 }}>
+
+                    <Button
+                        title="登入"
+                        onPress={() => this._loginButtonPress()}
+                        color="#fff"
+                        titleStyle={({ fontWeight: 700 }, { fontSize: 32 })}
+                        buttonStyle={styles.buttonStyle}
+                    />
+
+                    <Button
+                        title="註冊"
+                        onPress={() => this._signUpButtonPress()}
+                        color="#fff"
+                        titleStyle={({ fontWeight: '700' }, { fontSize: 32 })}
+                        buttonStyle={styles.buttonStyle}
+                    />
+
+                    {/* <Button
                     title="Login with Facebook"
-                    onPress={this._handleFacebookLogin}
+                    onPress={() => this._handleFacebookLogin()}
                     color="#fff"
                     titleStyle={({ fontWeight: '700' }, { fontSize: 32 })}
                     buttonStyle={styles.FBbuttonStyle}
-                />
+                    /> */}
+
+                </View>
             </View>
         );
     }
@@ -124,7 +147,7 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 2,
+        flex: 1,
         alignItems: 'center',
         // justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
@@ -156,7 +179,7 @@ const styles = StyleSheet.create({
         borderColor: 'transparent',
         borderWidth: 0.5,
         borderRadius: 4,
-        marginTop: 10,
+        marginTop: 15,
         padding: 0,
         shadowColor: 'black',
         shadowOpacity: 0.8,

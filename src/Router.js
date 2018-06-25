@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Home from './components/Home';
 import Account from './components/Account';
 import Help from './components/Help';
+import Signup from './components/Signup';
 import Database from './firebase'
 
 function SetFirebase() {
@@ -17,6 +18,9 @@ var abc = SetFirebase();
 const LoginStack = createStackNavigator({
     Login: {
         screen: Login,
+    },
+    Signup:{
+        screen: Signup,
     },
     HOME: {
         screen: Home,
