@@ -17,6 +17,14 @@ export default class Login extends Component {
         password: null,
     };
 
+    componentWillMount() {
+        var user = Database.auth.currentUser;
+        if (user != null) {
+            Database.auth.signOut()
+        };
+    };
+
+
     _setEmail = (email) => {
         this.setState({ email })
     };
@@ -31,6 +39,13 @@ export default class Login extends Component {
                 try {
                     await Database.auth.signInWithEmailAndPassword(this.state.email, this.state.password);
                     this.props.navigation.navigate('HOME')
+                    var user = Database.auth.currentUser;
+                    if (user != null) {
+                        Database.data.ref('/user/' + user.uid).once('value').then(function (snapshot) {
+                            var username = snapshot.child('username').val()
+                            Alert.alert('歡迎 ' + username);
+                        });
+                    };
                 }
                 catch (e) {
                     var errorMessage = e.message;
@@ -41,13 +56,6 @@ export default class Login extends Component {
         }
         else { Alert.alert('錯誤', '信箱不可為空'); }
 
-        var user = Database.auth.currentUser;
-        if (user != null) {
-            Database.data.ref('/user/' + user.uid).once('value').then(function (snapshot) {
-                var username = snapshot.child('username').val()
-                Alert.alert('Welcome ' + username);
-            });
-        };
     };
 
     _signUpButtonPress = () => {
@@ -100,7 +108,7 @@ export default class Login extends Component {
 
                     <TextInput
                         style={styles.textInput}
-                        placeholder='請輸入帳號'
+                        placeholder='請輸入信箱'
                         onChangeText={(email) => this._setEmail(email)}
                     />
 
@@ -166,7 +174,7 @@ const styles = StyleSheet.create({
     paragraph: {
         // flex:2,
         marginTop: 90,
-        marginBottom: 80,
+        marginBottom: 50,
         fontSize: 32,
         fontWeight: 'bold',
         textAlign: 'center',

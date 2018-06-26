@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { Alert, Platform, StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native'
 import { Constants, Permissions, Location } from 'expo';
 import { Icon } from 'react-native-elements';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import Database from '../firebase';
-import Help from './Help';
 
 export default class Home extends Component {
     state = {
@@ -17,8 +16,6 @@ export default class Home extends Component {
         myregion: {
             longitude: null,
             latitude: null,
-            longitudeDelta: 0.01,
-            latitudeDelta: 0.02,
         },
         errorMessage: null
     }
@@ -58,6 +55,11 @@ export default class Home extends Component {
         } else {
             this._getLocationAsync();
         }
+
+        // var user = Database.auth.currentUser;
+        // if (user == null) {
+        //     this.props.navigation.navigate('Login')
+        // };
     }
 
     onRegionChangeComplete = (region) => {
@@ -81,13 +83,11 @@ export default class Home extends Component {
                 latitudeDelta: 0.02
             },
             myregion: {
-                longitude: location.coords.latitude,
-                latitude: location.coords.longitude,
-                longitudeDelta: 0.01,
-                latitudeDelta: 0.02,
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
             },
         });
-    };    
+    };
 
     _setMyLocation = () => {
         this.props.navigation.navigate('Help', { ...this.state.myregion })
@@ -102,6 +102,12 @@ export default class Home extends Component {
                     style={styles.container}
                     onRegionChangeComplet={this.onRegionChangeComplet}
                 >
+                    <Marker
+                        coordinate={{ latitude: Number(this.state.myregion.latitude), longitude: Number(this.state.myregion.longitude) }}
+                        image={require("./img/mark80.png")}
+                        anchor={{ x: 0.5, y: 0 }}
+                        title={"嗨"}
+                        description={"你在這"} />
                     <View style={styles.header}>
                         <TouchableWithoutFeedback onPress={() => this.props.navigation.openDrawer()}>
                             <Image

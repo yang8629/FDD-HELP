@@ -16,14 +16,14 @@ function SetFirebase() {
 var abc = SetFirebase();
 
 const LoginStack = createStackNavigator({
+    HOME: {
+        screen: Home,
+    },
     Login: {
         screen: Login,
     },
     Signup:{
         screen: Signup,
-    },
-    HOME: {
-        screen: Home,
     },
     Help: {
         screen: Help,

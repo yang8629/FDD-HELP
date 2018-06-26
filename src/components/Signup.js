@@ -42,6 +42,11 @@ export default class Signup extends Component {
                         try {
                             await Database.auth.createUserWithEmailAndPassword(this.state.email, this.state.password);
                             this.props.navigation.navigate('HOME');
+                            var user = Database.auth.currentUser;
+                            if (user != null) {
+                                Database.data.ref('/user/').child(user.uid).child('username').set(this.state.username)
+                                Alert.alert('Welcome ' + this.state.username);
+                            };
                         }
                         catch (e) {
                             var errorMessage = e.message;
@@ -55,11 +60,6 @@ export default class Signup extends Component {
             else { Alert.alert('錯誤', '信箱不可為空'); }
         }
         else { Alert.alert('錯誤', '名稱不可為空'); }
-        var user = Database.auth.currentUser;
-        if (user != null) {
-            Database.data.ref('/user/').child(user.uid).child('username').set(this.state.username)
-            Alert.alert('Welcome ' + this.state.username);
-        };
     }
 
     _cancel = () => {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     paragraph: {
         // flex:2,
         marginTop: 90,
-        marginBottom: 80,
+        marginBottom: 50,
         fontSize: 32,
         fontWeight: 'bold',
         textAlign: 'center',
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         borderColor: 'transparent',
         borderWidth: 0.5,
         borderRadius: 4,
-        marginTop: 10,
+        marginTop: 15,
         padding: 0,
         shadowColor: 'black',
         shadowOpacity: 0.8,

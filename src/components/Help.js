@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
-import { Alert, StyleSheet, Text, View, Image, TouchableWithoutFeedback, } from 'react-native'
+import { Alert, StyleSheet, Text, View, Image, TouchableWithoutFeedback, TextInput } from 'react-native'
 import { Constants } from 'expo';
 import { Icon } from 'react-native-elements';
 import Database from '../firebase';
 
 export default class Help extends Component {
+    state = {
+        event: null,
+        location: null,
+    }
 
     static navigationOptions = ({ navigation }) => {
         const { params } = navigation.state
@@ -36,47 +40,87 @@ export default class Help extends Component {
         Database.data.ref().child('position').child('yang').set(params)
     }
 
-    render() {        
+    render() {
         const { params } = this.props.navigation.state
         return (
             <View style={styles.container}>
                 <View style={{ flex: 3, backgroundColor: 'gray' }}>
                 </View>
-                <Text style={styles.score}>20</Text>
                 <View style={{ flex: 7 }}>
-                    <Text style={styles.text}>
-                        Event:        {'\n'}{'\n'}
-                        Location:     {'\n'}{'\n'}
-                        Detail:       {'\n'}{'\n'}
-                    </Text>
+                    <View style={styles.main}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.text}>
+                                事件:
+                            </Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='請輸入事件'
+                                onChangeText={(event) => this._setEvent(event)}
+                            />
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.text}>
+                                地點:
+                            </Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='請輸入地點'
+                                onChangeText={(location) => this._setLocation(location)}
+                            />
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.text}>
+                                細節:
+                            </Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='請輸入細節'
+                                onChangeText={(detail) => this._setDetail(detail)}
+                            />
+                        </View>
+                    </View>
+
                     <View style={{
-                        flexDirection: 'row', justifyContent: 'center',
-                        marginTop: 100, paddingLeft: 40, paddingRight: 40
+                        flex: 1, flexDirection: 'row', justifyContent: 'center',
+                        marginBottom: 0, paddingLeft: 40, paddingRight: 40
                     }}>
                         <Text style={{
-                            flex: 1,
+                            flex: 2,
                             width: 200,
+                            color: 'white',
+                            marginTop:10,
                             borderColor: 'black',
                             borderWidth: 3,
-                            paddingLeft: 50,
+                            paddingLeft: 30,
                             fontSize: 35
                         }}
-                            onPress={() => this.props.navigation.goBack()}>Back</Text>
+                            onPress={() => this.props.navigation.goBack()}>取消</Text>
+                        <View style={{
+                            width: 0,
+                            height: 0,
+                            borderColor: 'transparent',
+                            borderLeftWidth: 40,
+                            borderRightWidth: 40,
+                            borderTopWidth: 30,
+                            borderTopColor: 'white'
+                        }} />
                         <Text style={{
-                            flex: 1,
+                            flex: 2,
                             width: 200,
+                            color: 'white',
                             justifyContent: 'center',
-                            backgroundColor: 'green',
+                            marginTop:10,
                             borderColor: 'black',
                             borderWidth: 3,
-                            paddingLeft: 13,
+                            paddingLeft: 30,
                             fontSize: 35
                         }}
-                            onPress={() => this._setMyLocation(params)}>Accept</Text>
+                            onPress={() => this._setMyLocation(params)}>送出</Text>
                     </View>
                 </View>
-
-
+                <View style={styles.score_view}>
+                    <Text style={styles.score}>20</Text>
+                </View>
             </View>
         );
     }
@@ -86,7 +130,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: Constants.statusBarHeight,
-        backgroundColor: '#ecf0f1',
+        backgroundColor: 'black',
     },
     head: {
         marginLeft: 12,
@@ -103,18 +147,21 @@ const styles = StyleSheet.create({
         width: 70,
     },
     score: {
+        padding: 15,
+        fontSize: 40,
+        color: 'black',
+    },
+    score_view: {
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        padding: 15,
         marginTop: 160,
         marginLeft: 300,
         height: 100,
         width: 100,
-        fontSize: 40,
-        color: 'lightblue',
+        backgroundColor: 'red',
         borderRadius: 50,
-        borderColor: 'lightblue',
+        borderColor: 'black',
         borderWidth: 10,
         shadowColor: 'black',
         shadowOpacity: 0.8,
@@ -124,9 +171,27 @@ const styles = StyleSheet.create({
             width: 0,
         },
     },
+    main: {
+        flex: 6,
+        margin: 5,
+        marginBottom: 0,
+        borderRadius: 50,
+        backgroundColor: 'white',
+    },
+    textInput: {
+        width: 280,
+        height: 44,
+        padding: 8,
+        marginTop: 20,
+        borderRadius: 50,
+        borderWidth: 0.5,
+        borderColor: '#000',
+        textAlign: 'center',
+    },
     text: {
-        paddingTop: 40,
+        margin: 15,
+        paddingTop: 10,
         paddingLeft: 20,
-        fontSize: 30,
+        fontSize: 25,
     }
 })
