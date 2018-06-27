@@ -56,14 +56,14 @@ export default class Home extends Component {
             this._getLocationAsync();
         }
 
-        // var user = Database.auth.currentUser;
-        // if (user == null) {
-        //     this.props.navigation.navigate('Login')
-        // };
+        var user = Database.auth.currentUser;
+        if (user == null) {
+            this.props.navigation.navigate('Login')
+        };
     }
 
     onRegionChangeComplete = (region) => {
-        this.setstate({ region });
+        this.setState({ region });
     }
 
     _getLocationAsync = async () => {
@@ -91,7 +91,6 @@ export default class Home extends Component {
 
     _setMyLocation = () => {
         this.props.navigation.navigate('Help', { ...this.state.myregion })
-        //Database.data.ref().child('position').child('yang').set(this.state.myregion)
     };
 
     render() {
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
         padding: 0,
         borderBottomRightRadius: 38,
         borderTopRightRadius: 38,
-        backgroundColor: '#00BFFF',
+        backgroundColor: 'red',
         shadowColor: 'black',
         shadowOpacity: 0.8,
         shadowRadius: 2,
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         marginTop: 530,
         marginLeft: 340,
-        backgroundColor: '#517fa4',
+        backgroundColor: 'black',
     },
     help: {
         position: 'absolute',

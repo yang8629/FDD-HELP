@@ -8,6 +8,7 @@ export default class Help extends Component {
     state = {
         event: null,
         location: null,
+        detail: null,
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -35,6 +36,18 @@ export default class Help extends Component {
             // )
         }
     };
+
+    _setEvent = (event) => {
+        this.setState({ event })
+    }
+
+    _setLocation = (location) => {
+        this.setState({ location })
+    }
+
+    _setDetail = (detail) => {
+        this.setState({ detail })
+    }
 
     _setMyLocation = (params) => {
         Database.data.ref().child('position').child('yang').set(params)
@@ -73,7 +86,7 @@ export default class Help extends Component {
                                 細節:
                             </Text>
                             <TextInput
-                                style={styles.textInput}
+                                style={styles.textInput_detial}
                                 placeholder='請輸入細節'
                                 onChangeText={(detail) => this._setDetail(detail)}
                             />
@@ -88,7 +101,7 @@ export default class Help extends Component {
                             flex: 2,
                             width: 200,
                             color: 'white',
-                            marginTop:10,
+                            marginTop: 10,
                             borderColor: 'black',
                             borderWidth: 3,
                             paddingLeft: 30,
@@ -109,7 +122,7 @@ export default class Help extends Component {
                             width: 200,
                             color: 'white',
                             justifyContent: 'center',
-                            marginTop:10,
+                            marginTop: 10,
                             borderColor: 'black',
                             borderWidth: 3,
                             paddingLeft: 30,
@@ -181,6 +194,16 @@ const styles = StyleSheet.create({
     textInput: {
         width: 280,
         height: 44,
+        padding: 8,
+        marginTop: 20,
+        borderRadius: 50,
+        borderWidth: 0.5,
+        borderColor: '#000',
+        textAlign: 'center',
+    },
+    textInput_detial: {
+        width: 280,
+        height: 88,
         padding: 8,
         marginTop: 20,
         borderRadius: 50,

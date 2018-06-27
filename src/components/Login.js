@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, Alert, TextInput, Image } from 'react-native'
-import { Constants, Facebook } from 'expo';
+import { Constants, Facebook, LinearGradient } from 'expo';
 import { Button } from 'react-native-elements';
 import Database from '../firebase';
+
 
 export default class Login extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -49,7 +50,23 @@ export default class Login extends Component {
                 }
                 catch (e) {
                     var errorMessage = e.message;
-                    Alert.alert('錯誤', errorMessage);
+                    switch (errorMessage) {
+                        case 'The password is invalid or the user does not have a password.': {
+                            Alert.alert('錯誤', '密碼錯誤');
+                            break;
+                        }
+                        case 'The email address is badly formatted.': {
+                            Alert.alert('錯誤', '信箱格式錯誤');
+                            break;
+                        }
+                        case 'There is no user record corresponding to this identifier. The user may have been deleted.': {
+                            Alert.alert('錯誤', '找不到此使用者');
+                            break;
+                        }
+                        default: {
+                            Alert.alert('錯誤', errorMessage);
+                        }
+                    }
                 }
             }
             else { Alert.alert('錯誤', '密碼不可為空'); }
@@ -59,7 +76,6 @@ export default class Login extends Component {
     };
 
     _signUpButtonPress = () => {
-        Alert.alert('到註冊畫面');
         this.props.navigation.navigate('Signup')
     };
 
@@ -100,54 +116,67 @@ export default class Login extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{ flex: 3 }}>
+                <LinearGradient colors={['black', 'white']} style={{ flex: 1, alignContent: 'center', alignItems: 'center' }}>
+                    <View style={{ flex: 4 }}>
+                        <Text style={styles.paragraph}>
+                            登入
+                        </Text>
 
-                    <Text style={styles.paragraph}>
-                        登入
-                    </Text>
+                        <View style={{ alignContent: 'center', alignItems: 'center', marginBottom: 20 }}>
+                            <Image
+                                source={require("./img/mark60.png")}
+                                style={styles.head}
+                            />
+                        </View>
 
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder='請輸入信箱'
-                        onChangeText={(email) => this._setEmail(email)}
-                    />
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder='請輸入信箱'
+                            placeholderTextColor='white'
+                            keyboardAppearance='dark'
+                            keyboardType='email-address'
+                            onChangeText={(email) => this._setEmail(email)}
+                        />
 
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder='請輸入密碼'
-                        onChangeText={(password) => this._setPassword(password)}
-                        secureTextEntry={true}
-                    />
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder='請輸入密碼'
+                            placeholderTextColor='white'
+                            keyboardAppearance='dark'
+                            onChangeText={(password) => this._setPassword(password)}
+                            secureTextEntry={true}
+                        />
 
-                </View>
+                    </View>
 
-                <View style={{ flex: 2 }}>
+                    <View style={{ flex: 2 }}>
 
-                    <Button
-                        title="登入"
-                        onPress={() => this._loginButtonPress()}
-                        color="#fff"
-                        titleStyle={({ fontWeight: 700 }, { fontSize: 32 })}
-                        buttonStyle={styles.buttonStyle}
-                    />
+                        <Button
+                            title="登入"
+                            onPress={() => this._loginButtonPress()}
+                            color="#fff"
+                            titleStyle={({ fontWeight: 700 }, { fontSize: 32 })}
+                            buttonStyle={styles.buttonStyle}
+                        />
 
-                    <Button
-                        title="註冊"
-                        onPress={() => this._signUpButtonPress()}
+                        <Button
+                            title="註冊"
+                            onPress={() => this._signUpButtonPress()}
+                            color="#fff"
+                            titleStyle={({ fontWeight: 700 }, { fontSize: 32 })}
+                            buttonStyle={styles.buttonStyle}
+                        />
+
+                        {/* <Button
+                        title="Login with Facebook"
+                        onPress={() => this._handleFacebookLogin()}
                         color="#fff"
                         titleStyle={({ fontWeight: '700' }, { fontSize: 32 })}
-                        buttonStyle={styles.buttonStyle}
-                    />
+                        buttonStyle={styles.FBbuttonStyle}
+                        /> */}
 
-                    {/* <Button
-                    title="Login with Facebook"
-                    onPress={() => this._handleFacebookLogin()}
-                    color="#fff"
-                    titleStyle={({ fontWeight: '700' }, { fontSize: 32 })}
-                    buttonStyle={styles.FBbuttonStyle}
-                    /> */}
-
-                </View>
+                    </View>
+                </LinearGradient>
             </View>
         );
     }
@@ -156,8 +185,7 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        // justifyContent: 'center',
+        justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
         backgroundColor: '#ecf0f1',
     },
@@ -166,9 +194,10 @@ const styles = StyleSheet.create({
         height: 44,
         padding: 8,
         margin: 10,
+        color: 'white',
         borderRadius: 50,
         borderWidth: 0.5,
-        borderColor: '#000',
+        borderColor: 'white',
         textAlign: 'center',
     },
     paragraph: {
@@ -178,10 +207,12 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#34495e',
+        color: 'white',
+    },
+    head: {
     },
     buttonStyle: {
-        backgroundColor: '#00BFFF',
+        backgroundColor: 'red',
         width: 300,
         height: 40,
         borderColor: 'transparent',

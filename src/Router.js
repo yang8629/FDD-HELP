@@ -39,13 +39,13 @@ const AccountStack = createStackNavigator({
 }, )
 
 export const DrawerRouter = createDrawerNavigator({
-    Home: {
+    主畫面: {
         screen: LoginStack,
     },
-    Account: {
+    個人資料: {
         screen: AccountStack,
     },
-    LogOut: {
+    登出: {
         screen: Login,
     }
 },
