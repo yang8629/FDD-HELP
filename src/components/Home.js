@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Alert, Platform, StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native'
+import { Alert, Platform, StyleSheet, Text, View, Image, TouchableWithoutFeedback, StatusBar } from 'react-native'
 import { Constants, Permissions, Location } from 'expo';
 import { Icon } from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
@@ -22,26 +22,9 @@ export default class Home extends Component {
 
     static navigationOptions = ({ navigation }) => {
         return {
+            drawerLabel: '主畫面',
+            drawerIcon: ({ tintColor }) => { return (<Icon name="list" size={25} color={tintColor} />) },
             header: null,
-            // headerStyle: {
-            //     height: 80,
-            //     backgroundColor:'white',
-            // },
-            // headerLeft: ( 
-            //     <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>               
-            //         <Image
-            //             source={require("./img/Joe.jpg")}
-            //             style={styles.head}
-            //         />
-            //     </TouchableWithoutFeedback>                
-            // ),
-            // headerRight: (                                
-            //     <Icon
-            //         name='question-circle'
-            //         size = '40'
-            //         containerStyle={styles.csetting}
-            //     />
-            // )
         }
     };
 
@@ -59,7 +42,7 @@ export default class Home extends Component {
         var user = Database.auth.currentUser;
         if (user == null) {
             this.props.navigation.navigate('Login')
-        };
+        };        
     }
 
     onRegionChangeComplete = (region) => {
@@ -140,7 +123,7 @@ const styles = StyleSheet.create({
     header: {
         position: 'absolute',
         marginLeft: 0,
-        marginTop: 15,
+        marginTop: 0,
         height: 76,
         width: 90,
         padding: 0,
@@ -171,14 +154,14 @@ const styles = StyleSheet.create({
     },
     getLocation: {
         position: 'absolute',
-        marginTop: 530,
+        marginTop: 550,
         marginLeft: 340,
         backgroundColor: 'black',
     },
     help: {
         position: 'absolute',
         padding: 10,
-        marginTop: 600,
+        marginTop: 620,
         marginLeft: 280,
         fontSize: 35,
         fontWeight: '500',

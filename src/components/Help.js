@@ -6,9 +6,11 @@ import Database from '../firebase';
 
 export default class Help extends Component {
     state = {
+
         event: null,
         location: null,
         detail: null,
+
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -37,6 +39,17 @@ export default class Help extends Component {
         }
     };
 
+    componentWillMount() {
+        var user = Database.auth.currentUser;
+
+        if (user != null) {
+            Database.data.ref('/user/' + user.uid).once('value', snapshot => {
+                var username = snapshot.child('username').val()
+                this.setState({ username })
+            });
+        };
+    }
+
     _setEvent = (event) => {
         this.setState({ event })
     }
@@ -50,7 +63,14 @@ export default class Help extends Component {
     }
 
     _setMyLocation = (params) => {
-        Database.data.ref().child('position').child('yang').set(params)
+        var uid = Database.auth.currentUser.uid;
+        var discript = {
+            event: this.state.event,
+            location: this.state.location,
+            detail: this.state.detail,
+        }
+        Database.data.ref('/HELP/').child(uid).child('position').set(params);
+        Database.data.ref('/HELP/').child(uid).child('discript').set(discript);
     }
 
     render() {
@@ -86,6 +106,10 @@ export default class Help extends Component {
                                 細節:
                             </Text>
                             <TextInput
+                                allowFontScaling={false}
+                                multiline={true}
+                                numberOfLines={2}
+                                blurOnSubmit={true}
                                 style={styles.textInput_detial}
                                 placeholder='請輸入細節'
                                 onChangeText={(detail) => this._setDetail(detail)}
@@ -97,16 +121,7 @@ export default class Help extends Component {
                         flex: 1, flexDirection: 'row', justifyContent: 'center',
                         marginBottom: 0, paddingLeft: 40, paddingRight: 40
                     }}>
-                        <Text style={{
-                            flex: 2,
-                            width: 200,
-                            color: 'white',
-                            marginTop: 10,
-                            borderColor: 'black',
-                            borderWidth: 3,
-                            paddingLeft: 30,
-                            fontSize: 35
-                        }}
+                        <Text style={styles.cancel}
                             onPress={() => this.props.navigation.goBack()}>取消</Text>
                         <View style={{
                             width: 0,
@@ -117,22 +132,14 @@ export default class Help extends Component {
                             borderTopWidth: 30,
                             borderTopColor: 'white'
                         }} />
-                        <Text style={{
-                            flex: 2,
-                            width: 200,
-                            color: 'white',
-                            justifyContent: 'center',
-                            marginTop: 10,
-                            borderColor: 'black',
-                            borderWidth: 3,
-                            paddingLeft: 30,
-                            fontSize: 35
-                        }}
+                        <Text style={styles.accept}
                             onPress={() => this._setMyLocation(params)}>送出</Text>
                     </View>
                 </View>
                 <View style={styles.score_view}>
-                    <Text style={styles.score}>20</Text>
+                    <TextInput
+                        style={styles.score}
+                        placeholder='分數' />
                 </View>
             </View>
         );
@@ -193,28 +200,54 @@ const styles = StyleSheet.create({
     },
     textInput: {
         width: 280,
-        height: 44,
+        height: 45,
         padding: 8,
+        paddingLeft: 10,
         marginTop: 20,
-        borderRadius: 50,
+        fontSize: 25,
+        borderRadius: 20,
         borderWidth: 0.5,
         borderColor: '#000',
-        textAlign: 'center',
+        // textAlign: 'center',
     },
     textInput_detial: {
         width: 280,
-        height: 88,
+        height: 90,
         padding: 8,
+        paddingLeft: 10,
+        paddingTop: 10,
         marginTop: 20,
-        borderRadius: 50,
+        fontSize: 25,
+        borderRadius: 20,
         borderWidth: 0.5,
         borderColor: '#000',
-        textAlign: 'center',
+        // textAlign: 'center',
     },
     text: {
         margin: 15,
-        paddingTop: 10,
+        paddingTop: 12,
         paddingLeft: 20,
         fontSize: 25,
-    }
+    },
+    cancel: {
+        flex: 2,
+        width: 200,
+        color: 'white',
+        marginTop: 10,
+        borderColor: 'black',
+        borderWidth: 3,
+        paddingLeft: 30,
+        fontSize: 35
+    },
+    accept: {
+        flex: 2,
+        width: 200,
+        color: 'white',
+        justifyContent: 'center',
+        marginTop: 10,
+        borderColor: 'black',
+        borderWidth: 3,
+        paddingLeft: 30,
+        fontSize: 35
+    },
 })

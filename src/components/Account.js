@@ -13,8 +13,12 @@ export default class Account extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             Title: '個人資料',
-            drawerLabel: 'Account',
-            //header: null,
+            drawerLabel: '個人資料',
+            drawerIcon: (
+                <Icon
+                    name='settings'
+                />
+            ),
             headerStyle: {
                 height: 80,
                 backgroundColor: 'white',
@@ -33,7 +37,6 @@ export default class Account extends Component {
                     size={40}
                     containerStyle={styles.csetting}
                 />
-
             ),
         }
     };
